@@ -6,6 +6,7 @@ using E_Commerce.Infrastructure.Data;
 using E_Commerce.Infrastructure.Data.Services;
 using E_Commerce.Infrastructure.DataSeedingImplementation;
 using E_Commerce.Infrastructure.Identity.Data;
+using E_Commerce.Infrastructure.Identity.Services;
 using E_Commerce.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -60,6 +61,7 @@ namespace E_Commerce.Infrastructure
                             .AddRoles<IdentityRole>()
                             .AddEntityFrameworkStores<StoreIdentityDbContext>();
             services.AddScoped<IIdentityService, IdentityService>();
+            services.AddScoped<ITokenService, TokenService>();
 
             return services;
         }

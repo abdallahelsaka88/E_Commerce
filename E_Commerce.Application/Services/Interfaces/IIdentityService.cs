@@ -13,8 +13,8 @@ namespace E_Commerce.Application.Services.Interfaces
     {
         Task<Result<IdentityUserResult>> FindUserByEmailAsync(string email, CancellationToken ct);
         Task<Result<bool>> CheckPasswordAsync(string email, string password, CancellationToken ct);
-
         Task<Result<IdentityUserResult>> CreateUserAsync(RegisterDto registerDto, CancellationToken ct);
+        Task<Result<IReadOnlyList<string>>> GetUserRoleAsync(string email, CancellationToken ct);
 
     }
 }

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace E_Commerce.Application.Services.Classes
 {
-    public class AuthenticationService(IIdentityService identityService) : IAuthenticationServices
+    public class AuthenticationService(IIdentityService identityService, ITokenService tokenService) : IAuthenticationServices
     {
         public async Task<Result<UserDto>> LoginAsync(LoginDto loginDto, CancellationToken ct = default)
         {
@@ -25,15 +25,15 @@ namespace E_Commerce.Application.Services.Classes
             if (!passswordResult.IsSuccess)
                 return Result<UserDto>.Fail(passswordResult.Errors);
 
-
-
+            var rolesResult = await identityService.GetUserRoleAsync(userResult.Data.Email, ct);
+            var token = await tokenService.CreateTokenAsync(userResult.Data.Id, userResult.Data.Email, userResult.Data.UserName, rolesResult.Data);
 
             //return userDto
             var user = userResult.Data;
             return Result<UserDto>.OK(new UserDto()
             {
                 Email = user.Email,
-                Token = "TODO",
+                Token = token,
                 DisplayName = user.DisplayName,
             });
 
@@ -43,18 +43,22 @@ namespace E_Commerce.Application.Services.Classes
         public async Task<Result<UserDto>> RegisterAsync(RegisterDto registerDto, CancellationToken ct)
         {
             //Create User
-            var createResult = await identityService.CreateUserAsync(registerDto, ct);
+            var userResult = await identityService.CreateUserAsync(registerDto, ct);
 
 
-            if (!createResult.IsSuccess)
-                return Result<UserDto>.Fail(createResult.Errors);
-            var user = createResult.Data;
+            if (!userResult.IsSuccess)
+                return Result<UserDto>.Fail(userResult.Errors);
+            var user = userResult.Data;
+
+            var rolesResult = await identityService.GetUserRoleAsync(userResult.Data.Email, ct);
+            var token = await tokenService.CreateTokenAsync(userResult.Data.Id, userResult.Data.Email, userResult.Data.UserName, rolesResult.Data);
+
 
             return Result<UserDto>.OK(new UserDto()
             {
                 DisplayName = user.DisplayName,
                 Email = user.Email,
-                Token = "TODO"
+                Token = token
 
             });
 
