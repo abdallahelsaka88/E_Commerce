@@ -18,5 +18,12 @@ namespace E_Commerce.Application.Services.Interfaces
         //Registration
         Task<Result<UserDto>> RegisterAsync(RegisterDto registerDto, CancellationToken ct);
 
+        Task<Result<bool>> CheckEmailExistsAsync(string email, CancellationToken ct = default);
+
+        Task<Result<UserDto>> GetCurrentUserAsync(string email, CancellationToken ct = default);
+
+        Task<Result<AddressDto>> GetCurrentUserAddress(string email, CancellationToken ct);
+        Task<Result<AddressDto>> UpdateCurrentUserAddress(string email, AddressDto addressDto, CancellationToken ct);
+
     }
 }

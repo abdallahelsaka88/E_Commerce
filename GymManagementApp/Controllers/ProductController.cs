@@ -3,6 +3,7 @@ using E_Commerce.Application.DTOS.ProductDtos;
 using E_Commerce.Application.Services.Interfaces;
 using E_Commerce.Domain.Common;
 using GymManagementApp.API.Attributes;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,6 +16,7 @@ namespace GymManagementApp.API.Controllers
         //GET: api/Products
         [HttpGet]
         [RedisCache(60)]
+        [Authorize]
         public async Task<ActionResult<PaginationResult<ProductDto>>> GetAllProductAsync([FromQuery] ProductQueryParams queryParams, CancellationToken ct)
         {
             var result = await productService.GetAllProductsAsync(queryParams, ct);

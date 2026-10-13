@@ -26,7 +26,7 @@ namespace GymManagementApp
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            
+
 
             var app = builder.Build();
             await app.SeedMigrationDataAsync();
@@ -44,7 +44,7 @@ namespace GymManagementApp
             });
 
             app.UseHttpsRedirection();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
 

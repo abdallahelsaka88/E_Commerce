@@ -11,6 +11,46 @@ namespace E_Commerce.Application.Services.Classes
 {
     public class AuthenticationService(IIdentityService identityService, ITokenService tokenService) : IAuthenticationServices
     {
+
+        public async Task<Result<UserDto>> GetCurrentUserAsync(string email, CancellationToken ct = default)
+        {
+            var userrResult = await identityService.FindUserByEmailAsync(email, ct);
+            if (userrResult.IsSuccess)
+            {
+                var user = userrResult.Data;
+
+
+                var roles = await identityService.GetUserRoleAsync(user.Email, ct);
+
+                var token = tokenService.CreateTokenAsync(user.Id, user.Email, user.UserName, roles.Data);
+                return Result<UserDto>.OK(new UserDto()
+                {
+                    Email = user.Email,
+                    DisplayName = user.DisplayName,
+                    Token = await token
+                });
+            }
+
+            else
+            {
+                return Result<UserDto>.Fail(userrResult.Errors);
+            }
+
+        }
+
+
+
+        public async Task<Result<bool>> CheckEmailExistsAsync(string email, CancellationToken ct = default)
+        {
+            var check = await identityService.FindUserByEmailAsync(email, ct);
+            if (check.IsSuccess)
+                return Result<bool>.OK(true);
+            return Result<bool>.Fail(check.Errors);
+
+        }
+
+
+
         public async Task<Result<UserDto>> LoginAsync(LoginDto loginDto, CancellationToken ct = default)
         {
             //check email
@@ -62,6 +102,16 @@ namespace E_Commerce.Application.Services.Classes
 
             });
 
+        }
+
+        public async Task<Result<AddressDto>> GetCurrentUserAddress(string email, CancellationToken ct)
+        {
+            return await identityService.GetCurrentUserAddressAsync(email, ct);
+        }
+
+        public async Task<Result<AddressDto>> UpdateCurrentUserAddress(string email, AddressDto addressDto, CancellationToken ct)
+        {
+            return await identityService.UpdateGetCurrentUserAddressAsync(email, addressDto, ct);
         }
     }
 }

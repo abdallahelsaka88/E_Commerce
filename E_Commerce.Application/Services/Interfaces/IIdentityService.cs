@@ -15,6 +15,9 @@ namespace E_Commerce.Application.Services.Interfaces
         Task<Result<bool>> CheckPasswordAsync(string email, string password, CancellationToken ct);
         Task<Result<IdentityUserResult>> CreateUserAsync(RegisterDto registerDto, CancellationToken ct);
         Task<Result<IReadOnlyList<string>>> GetUserRoleAsync(string email, CancellationToken ct);
+        Task<Result<AddressDto>> GetCurrentUserAddressAsync(string email, CancellationToken ct);
+        Task<Result<AddressDto>> UpdateGetCurrentUserAddressAsync(string email, AddressDto addressDto, CancellationToken ct);
+
 
     }
 }
