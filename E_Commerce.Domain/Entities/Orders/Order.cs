@@ -30,6 +30,8 @@ namespace E_Commerce.Domain.Entities.Orders
         public decimal SubTotal { get; set; }
         public OrderStatus Status { get; set; } = OrderStatus.Pending;
         public int DeliveryMethodId { get; set; }
+        public string? PaymentIntentId { get; set; }
+
         public DateTimeOffset OrderDate { get; set; } = DateTimeOffset.UtcNow;
         public decimal GetTotal() => SubTotal + (DeliveryMethod?.Cost ?? 0);
     }

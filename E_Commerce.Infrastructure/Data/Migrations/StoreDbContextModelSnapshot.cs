@@ -65,6 +65,9 @@ namespace E_Commerce.Infrastructure.Data.Migrations
                     b.Property<DateTimeOffset>("OrderDate")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<string>("PaymentIntentId")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -250,9 +253,10 @@ namespace E_Commerce.Infrastructure.Data.Migrations
                             b1.Property<int>("OrderItemId")
                                 .HasColumnType("int");
 
-                            b1.Property<int>("PictureUrl")
+                            b1.Property<string>("PictureUrl")
+                                .IsRequired()
                                 .HasMaxLength(200)
-                                .HasColumnType("int")
+                                .HasColumnType("nvarchar(200)")
                                 .HasColumnName("PictureUrl");
 
                             b1.Property<int>("ProductId")
